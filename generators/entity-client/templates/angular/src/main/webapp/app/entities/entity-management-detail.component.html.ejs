@@ -16,9 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="<%= entityInstance %>">
+            <div id="qrcodePlaceHolder"></div>
+
             <h2><span jhiTranslate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{ <%= entityInstance %>.id }}</h2>
 
             <hr>
@@ -31,7 +34,7 @@
                     const fieldType = fields[idx].fieldType;
                     const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                 _%>
-                <dt><span jhiTranslate="<%= i18nKeyPrefix %>.<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
+                <dt><span jhiTranslate="<%= i18nKeyPrefix %>.<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %>COUCOU</span></dt>
                 <dd>
                     <%_ if (fields[idx].fieldIsEnum) { _%>
                     <span jhiTranslate="{{ '<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
@@ -122,3 +125,13 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="qrcode.js"></script>
+<script>
+    var typeNumber = 4;
+    var errorCorrectionLevel = 'L';
+    var qr = qrcode(typeNumber, errorCorrectionLevel);
+    qr.addData(window.location.href);
+    qr.make();
+    document.getElementById('qrcodePlaceHolder').innerHTML = qr.createImgTag();
+</script>
